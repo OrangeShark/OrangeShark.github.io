@@ -1,0 +1,11 @@
+.content {
+  margin: 0 auto;
+}
+
+.header {
+  background: #FFD173;
+}
+
+#menu .pure-menu-open {
+  background: rgba(0,0,0,0);
+}
