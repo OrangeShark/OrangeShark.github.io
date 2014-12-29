@@ -1,0 +1,10 @@
+{
+    "host": "http://www.erikedrosa.com",
+    "title": "Erik Edrosa",
+    "author": "Erik Edrosa",
+    "header": "OrangeShark",
+    "post_limit": 10,
+    "layout_dir": "_src/layouts",
+    "blog_dir": "_src/posts",
+    "output_dir": "."
+}

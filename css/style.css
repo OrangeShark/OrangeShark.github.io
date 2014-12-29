@@ -1,0 +1,36 @@
+body {
+    background: #f4f4f4;
+}
+
+.home-menu.pure-menu-open {
+    background: #ffd173;
+}
+
+a {
+    text-decoration: none;
+    color: #576fab
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.post-title {
+    color: #222;
+    margin-bottom: 0.2em;
+}
+
+.post-meta {
+    color: #999;
+    margin: 0px;
+}
+
+.content {
+    padding: 15px;
+}
+
+.footer {
+    font-size: 70%;
+    color: #555;
+    padding: 20px;
+}
