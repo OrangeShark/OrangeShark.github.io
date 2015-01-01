@@ -1,5 +1,5 @@
 title: Tutorial: Hello, world! Cinnamon desklet
-date: 2014-12-31
+date: 2014-12-30
 tags: JavaScript, Cinnamon, desklet, tutorial
 
 This is the first of hopefully several tutorials on developing desklets for
@@ -18,7 +18,7 @@ for GNOME and is based on Mozilla's JavaScript engine
 
 My reason for creating this tutorial came about when I was creating a desklet
 for Cinnamon. There were barely any guides or tutorials on creating a desklet
-and finding documention on the libraries available in CJS was difficult. The
+and finding documentation on the libraries available in CJS was difficult. The
 only advice I saw was to read other people's source code and learn from that,
 while it is a great way to learn, it does not provide enough information. So
 I would like to share what I have learned and where I found it.
@@ -36,12 +36,12 @@ provides an easy way to create simple user interfaces.
 
 ## Set up ##
 
-Lets start by setting up the directory for our desklet. Desklets are stored
-in the user's home directory ~/.local/share/cinnamon/desklets, this is where we will
-work on desklet. First, we need to create the directory of our desklet with
-a unique ID or UUID in the following format "desklet-name@name", where
-desklet-name is the desklet's name, in this case hello-world, and name is
-either your name or your domain name. I will use the UUID
+Let's start by setting up the directory for our desklet. Desklets are stored
+in the user's home directory ~/.local/share/cinnamon/desklets, this is where
+we will work on our desklet. First, we need to create the directory of our
+desklet with a unique ID or UUID in the following format "desklet-name@name",
+where desklet-name is the desklet's name, in this case hello-world, and name
+is either your name or your domain name. I will use the UUID
 "hello-world@orangeshark".
 
 ```sh
@@ -61,7 +61,7 @@ located. metadata.json contains, of course, the metadata for the desklet,
 including the UUID and name of the desklet.
 
 ```bash
-touch desklet.js metadata.json settings-schema.json stylesheet.css
+touch desklet.js metadata.json
 ```
 
 ## Time to code ##
@@ -79,7 +79,7 @@ the following json.
 ```
 
 The metadata contains basic information about your desklet, including the
-UUID we discused earlier. The only special property is "prevent-decorations"
+UUID we discussed earlier. The only special property is "prevent-decorations"
 which tells Cinnamon whether to apply your desktop's theme or prevent it from
 inheriting it. For this simple example, we will put the value false so the
 desklet looks like the rest of your desktop.
@@ -121,16 +121,16 @@ The const declaration creates a constant in the current scope, in this case
 the global scope, with a value that cannot be changed through re-assignment.
 We use it here to import the desklet module from Cinnamon. The next function
 is our Desklet object's constructor, following GNOME's style guide for
-creating "classes". Following GNOME's class pattern, we assign to the
+creating "classes". Using GNOME's class pattern, we assign to the
 prototype of HelloDesklet an object containing the methods and properties for
-our HelloDesklet class. The first property "__proto__" is a special
+our HelloDesklet class. The first property "\_\_proto\_\_" is a special
 one, it allows us to modify the prototype chain, allowing us to have a
 sort of inheritance of classes. So if a property is not found in the current
 instance, it will walk the prototype chain to the next prototype, in this
 case Desklet's prototype, and check if the property is there. So our desklet
 must "inherit" from [Cinnamon's Desklet class](https://github.com/linuxmint/Cinnamon/blob/master/js/ui/desklet.js#L35),
 Desklet contains a lot of code required by Cinnamon to set up and destroy a
-desklet. The _init function is the actual constructor for our "class" and our
+desklet. The \_init function is the actual constructor for our "class" and our
 first task is to call the Desklet's constructor, passing the current instance
 using "this". Finally the main function is the entry point to our desklet and
 we just return an instance of our desklet.

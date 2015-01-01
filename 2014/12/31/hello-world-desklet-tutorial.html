@@ -30,7 +30,7 @@
   <h1 class="post-title">
     Tutorial: Hello, world! Cinnamon desklet
   </h1>
-  <p class="post-meta">2014/12/31 - 
+  <p class="post-meta">2014/12/30 - 
       JavaScript
       Cinnamon
       desklet
@@ -51,7 +51,7 @@ for GNOME and is based on Mozilla's JavaScript engine
 <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey">Spidermonkey</a>.</p>
 <p>My reason for creating this tutorial came about when I was creating a desklet
 for Cinnamon. There were barely any guides or tutorials on creating a desklet
-and finding documention on the libraries available in CJS was difficult. The
+and finding documentation on the libraries available in CJS was difficult. The
 only advice I saw was to read other people's source code and learn from that,
 while it is a great way to learn, it does not provide enough information. So
 I would like to share what I have learned and where I found it.</p>
@@ -66,12 +66,12 @@ provides an easy way to create simple user interfaces.</p>
 <li>Your favorite text editor</li>
 </ul>
 <h2>Set up</h2>
-<p>Lets start by setting up the directory for our desklet. Desklets are stored
-in the user's home directory ~/.local/share/cinnamon/desklets, this is where we will
-work on desklet. First, we need to create the directory of our desklet with
-a unique ID or UUID in the following format "desklet-name@name", where
-desklet-name is the desklet's name, in this case hello-world, and name is
-either your name or your domain name. I will use the UUID
+<p>Let's start by setting up the directory for our desklet. Desklets are stored
+in the user's home directory ~/.local/share/cinnamon/desklets, this is where
+we will work on our desklet. First, we need to create the directory of our
+desklet with a unique ID or UUID in the following format "desklet-name@name",
+where desklet-name is the desklet's name, in this case hello-world, and name
+is either your name or your domain name. I will use the UUID
 "hello-world@orangeshark".</p>
 <div class="codehilite"><pre>mkdir -p ~/.local/share/cinnamon/desklets/hello-world@orangeshark
 <span class="nb">cd</span> ~/.local/share/cinnamon/desklets/hello-world@orangeshark
@@ -89,7 +89,7 @@ following structure:</p>
 <p>The desklet.js file is where the majority of our JavaScript code will be
 located. metadata.json contains, of course, the metadata for the desklet,
 including the UUID and name of the desklet.</p>
-<div class="codehilite"><pre>touch desklet.js metadata.json settings-schema.json stylesheet.css
+<div class="codehilite"><pre>touch desklet.js metadata.json
 </pre></div>
 
 
@@ -106,7 +106,7 @@ the following json.</p>
 
 
 <p>The metadata contains basic information about your desklet, including the
-UUID we discused earlier. The only special property is "prevent-decorations"
+UUID we discussed earlier. The only special property is "prevent-decorations"
 which tells Cinnamon whether to apply your desktop's theme or prevent it from
 inheriting it. For this simple example, we will put the value false so the
 desklet looks like the rest of your desktop.</p>
@@ -146,9 +146,9 @@ The const declaration creates a constant in the current scope, in this case
 the global scope, with a value that cannot be changed through re-assignment.
 We use it here to import the desklet module from Cinnamon. The next function
 is our Desklet object's constructor, following GNOME's style guide for
-creating "classes". Following GNOME's class pattern, we assign to the
+creating "classes". Using GNOME's class pattern, we assign to the
 prototype of HelloDesklet an object containing the methods and properties for
-our HelloDesklet class. The first property "<strong>proto</strong>" is a special
+our HelloDesklet class. The first property "__proto__" is a special
 one, it allows us to modify the prototype chain, allowing us to have a
 sort of inheritance of classes. So if a property is not found in the current
 instance, it will walk the prototype chain to the next prototype, in this
