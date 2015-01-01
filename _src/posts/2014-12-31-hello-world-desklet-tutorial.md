@@ -1,5 +1,5 @@
 title: Tutorial: Hello, world! Cinnamon desklet
-date: 2014-12-30
+date: 2014-12-31
 tags: JavaScript, Cinnamon, desklet, tutorial
 
 This is the first of hopefully several tutorials on developing desklets for
