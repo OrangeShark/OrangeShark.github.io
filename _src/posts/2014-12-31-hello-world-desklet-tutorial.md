@@ -52,9 +52,11 @@ cd ~/.local/share/cinnamon/desklets/hello-world@orangeshark
 Now we need to create the structure for our project. A desklet has the
 following structure:
 
-    hello-world@orangeshark/
-    ├── desklet.js
-    └── metadata.json
+```text
+hello-world@orangeshark/
+├── desklet.js
+└── metadata.json
+```
 
 The desklet.js file is where the majority of our JavaScript code will be
 located. metadata.json contains, of course, the metadata for the desklet,
