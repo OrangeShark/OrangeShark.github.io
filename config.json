@@ -1,9 +1,10 @@
 {
-    "host": "http://www.erikedrosa.com",
+    "host": "http://www.erikedrosa.com/",
     "title": "Erik Edrosa",
     "author": "Erik Edrosa",
+    "description": "A blog about programming",
     "header": "OrangeShark",
-    "post_limit": 10,
+    "post_limit": 5,
     "layout_dir": "_src/layouts",
     "blog_dir": "_src/posts",
     "output_dir": "."

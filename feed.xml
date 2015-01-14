@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<rss version="2.0"><channel><title>Erik Edrosa</title><link>http://www.erikedrosa.com/</link><description>A blog about programming</description><lastBuildDate>Wed, 14 Jan 2015 15:59:10 GMT</lastBuildDate><generator>PyRSS2Gen-1.1.0</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Tutorial: Hello, world! Cinnamon desklet</title><link>http://www.erikedrosa.com/2014/12/31/hello-world-desklet-tutorial.html</link><description>&lt;p&gt;This is the first of hopefully several tutorials on developing desklets for
+the Cinnamon desktop environment. In this tutorial, I will cover the basics
+of creating a desklet and do my best to link or refer to additional
+resources where you might find more information on
+the topics. &lt;a href="https://en.wikipedia.org/wiki/Cinnamon_%28software%29"&gt;Cinnamon&lt;/a&gt;
+is a linux desktop environment forked from Gnome Shell by
+&lt;a href="http://linuxmint.com/"&gt;Linux Mint&lt;/a&gt;. A desklet is a small application which
+appears on the Cinnamon desktop, Cinnamon ships with three desklets and more
+can be found &lt;a href="http://cinnamon-spices.linuxmint.com/desklets"&gt;here&lt;/a&gt;. Desklets
+are written in JavaScript and uses CJS which is based on Gjs.
+&lt;a href="https://wiki.gnome.org/Projects/Gjs"&gt;Gjs&lt;/a&gt; are JavaScript bindings
+for GNOME and is based on Mozilla's JavaScript engine
+&lt;a href="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey"&gt;Spidermonkey&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;My reason for creating this tutorial came about when I was creating a desklet
+for Cinnamon. There were barely any guides or tutorials on creating a desklet
+and finding documentation on the libraries available in CJS was difficult. The
+only advice I saw was to read other people's source code and learn from that,
+while it is a great way to learn, it does not provide enough information. So
+I would like to share what I have learned and where I found it.&lt;/p&gt;
+&lt;p&gt;Our first desklet will be a simple "Hello, World!" program, a simple program
+which displays the text "Hello, World!" on the desktop using GNOME Shell's
+&lt;a href="https://wiki.gnome.org/Projects/Clutter"&gt;Clutter&lt;/a&gt;-based toolkit called
+&lt;a href="https://developer.gnome.org/st/stable/"&gt;St (Shell Toolkit)&lt;/a&gt;. The St library
+provides an easy way to create simple user interfaces.&lt;/p&gt;
+&lt;h2&gt;Requirements&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Cinnamon (I am running Linux Mint 17.1 with version 2.4.5)&lt;/li&gt;
+&lt;li&gt;Your favorite text editor&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Set up&lt;/h2&gt;
+&lt;p&gt;Let's start by setting up the directory for our desklet. Desklets are stored
+in the user's home directory ~/.local/share/cinnamon/desklets, this is where
+we will work on our desklet. First, we need to create the directory of our
+desklet with a unique ID or UUID in the following format "desklet-name@name",
+where desklet-name is the desklet's name, in this case hello-world, and name
+is either your name or your domain name. I will use the UUID
+"hello-world@orangeshark".&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;mkdir -p ~/.local/share/cinnamon/desklets/hello-world@orangeshark
+&lt;span class="nb"&gt;cd&lt;/span&gt; ~/.local/share/cinnamon/desklets/hello-world@orangeshark
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now we need to create the structure for our project. A desklet has the
+following structure:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;hello-world@orangeshark/
+├── desklet.js
+└── metadata.json
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The desklet.js file is where the majority of our JavaScript code will be
+located. metadata.json contains, of course, the metadata for the desklet,
+including the UUID and name of the desklet.&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;touch desklet.js metadata.json
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Time to code&lt;/h2&gt;
+&lt;p&gt;Lets first define the metadata for the desklet, open up metadata.json and add
+the following json.&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;uuid&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;hello-world@orangeshark&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;name&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Hello, world! desklet&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;description&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Displays Hello, World!&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;prevent-decorations&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;false&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The metadata contains basic information about your desklet, including the
+UUID we discussed earlier. The only special property is "prevent-decorations"
+which tells Cinnamon whether to apply your desktop's theme or prevent it from
+inheriting it. For this simple example, we will put the value false so the
+desklet looks like the rest of your desktop.&lt;/p&gt;
+&lt;p&gt;Now for the JavaScript. There are several coding style guides to follow for
+JavaScript by the GNOME project, Cinnamon seems to follow
+&lt;a href="https://wiki.gnome.org/Projects/GnomeShell/Gjs_StyleGuide"&gt;this guide&lt;/a&gt;. If
+you are used to using JavaScript on the web or in node.js, you might notice
+a couple of differences in the language. Several of these features are
+from Mozilla's version of JavaScript with some being defined in future
+versions of ECMAScript. I will provide links where you can find additional
+information on those features as we encounter them.&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;Desklet&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;imports&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;ui&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;desklet&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;HelloDesklet&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;metadata&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;desklet_id&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;_init&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;metadata&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;desklet_id&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="nx"&gt;HelloDesklet&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;prototype&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nx"&gt;__proto__&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;Desklet&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;Desklet&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;prototype&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+
+    &lt;span class="nx"&gt;_init&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;metadata&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;desklet_id&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="nx"&gt;Desklet&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;Desklet&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;prototype&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;_init&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;call&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;metadata&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;desklet_id&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;main&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;metadata&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;desklet_id&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;HelloDesklet&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;metadata&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;desklet_id&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The above code is all you need to create a minimal desklet. You can use it
+as the basic template to start your own desklet. Now for an explanation of
+each part! The first line contains const, one of those new features I
+mentioned earlier, more info &lt;a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const"&gt;here&lt;/a&gt;.
+The const declaration creates a constant in the current scope, in this case
+the global scope, with a value that cannot be changed through re-assignment.
+We use it here to import the desklet module from Cinnamon. The next function
+is our Desklet object's constructor, following GNOME's style guide for
+creating "classes". Using GNOME's class pattern, we assign to the
+prototype of HelloDesklet an object containing the methods and properties for
+our HelloDesklet class. The first property "__proto__" is a special
+one, it allows us to modify the prototype chain, allowing us to have a
+sort of inheritance of classes. So if a property is not found in the current
+instance, it will walk the prototype chain to the next prototype, in this
+case Desklet's prototype, and check if the property is there. So our desklet
+must "inherit" from &lt;a href="https://github.com/linuxmint/Cinnamon/blob/master/js/ui/desklet.js#L35"&gt;Cinnamon's Desklet class&lt;/a&gt;,
+Desklet contains a lot of code required by Cinnamon to set up and destroy a
+desklet. The _init function is the actual constructor for our "class" and our
+first task is to call the Desklet's constructor, passing the current instance
+using "this". Finally the main function is the entry point to our desklet and
+we just return an instance of our desklet.&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;Desklet&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;imports&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;ui&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;desklet&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="kr"&gt;const&lt;/span&gt; &lt;span class="nx"&gt;St&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;imports&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;gi&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;St&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;HelloDesklet&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;metadata&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;desklet_id&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;_init&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;metadata&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;desklet_id&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="nx"&gt;HelloDesklet&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;prototype&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nx"&gt;__proto__&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;Desklet&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;Desklet&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;prototype&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+
+    &lt;span class="nx"&gt;_init&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;metadata&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;desklet_id&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="nx"&gt;Desklet&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;Desklet&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;prototype&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;_init&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;call&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;metadata&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;desklet_id&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+        &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;setupUI&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+    &lt;span class="p"&gt;},&lt;/span&gt;
+
+    &lt;span class="nx"&gt;setupUI&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="c1"&gt;// main container for the desklet&lt;/span&gt;
+        &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nb"&gt;window&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;St&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;Bin&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+        &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;text&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;St&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;Label&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+        &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;text&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;set_text&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Hello, world!&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+        &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nb"&gt;window&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;add_actor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;text&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;setContent&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nb"&gt;window&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;main&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;metadata&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;desklet_id&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nx"&gt;HelloDesklet&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;metadata&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;desklet_id&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;We now import a new library, this time St or Shell Toolkit library from GNOME.
+I have found &lt;a href="http://www.roojs.com/seed/gir-1.2-gtk-3.0/seed/St.html"&gt;this&lt;/a&gt;
+documentation to be helpful in finding what classes are available in
+JavaScript over the GNOME's official &lt;a href="https://developer.gnome.org/st/stable/"&gt;C API reference&lt;/a&gt;.
+Next, a new method to HelloDesklet has been added which sets up our little
+window on the desktop and displays the text "Hello, world!". We use a
+StBin container that can contain a single child, which is a StLabel widget
+with the text "Hello, world!". Finally we add the label to the window with
+the add_actor method and then set the desklet content with setContent method
+inherited from the Desklet base class. That is it! We have finished the
+basis of a simple desklet for Cinnamon. It should look something like what
+you see below (the style might be different depending on your Cinnamon theme).&lt;/p&gt;
+&lt;p&gt;&lt;img class="pure-img" alt="Hello, World!" src="/imgs/helloworlddesklet.png"&gt;&lt;/p&gt;
+&lt;p&gt;This concludes the tutorial for Cinnamon desklets. I plan on covering more
+aspects on creating Cinnamon desklets in the future, so stay tuned!&lt;/p&gt;</description><guid isPermaLink="true">http://www.erikedrosa.com/2014/12/31/hello-world-desklet-tutorial.html</guid><pubDate>Wed, 31 Dec 2014 00:00:00 GMT</pubDate></item></channel></rss>
