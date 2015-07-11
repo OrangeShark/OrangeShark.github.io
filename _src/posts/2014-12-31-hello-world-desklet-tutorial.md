@@ -23,6 +23,8 @@ only advice I saw was to read other people's source code and learn from that,
 while it is a great way to learn, it does not provide enough information. So
 I would like to share what I have learned and where I found it.
 
+@@@
+
 Our first desklet will be a simple "Hello, World!" program, a simple program
 which displays the text "Hello, World!" on the desktop using GNOME Shell's
 [Clutter](https://wiki.gnome.org/Projects/Clutter)-based toolkit called
