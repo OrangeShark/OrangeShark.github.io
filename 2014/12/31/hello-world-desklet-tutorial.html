@@ -16,16 +16,6 @@
     <link rel="home" type="application/rss+xml" href="/feed.xml" title="RSS Feed">
 
     <!-- JavaScript -->
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-58563127-1', 'auto');
-      ga('send', 'pageview');
-
-    </script>
   </head>
 
   <body>
@@ -90,36 +80,32 @@ desklet with a unique ID or UUID in the following format "desklet-name@name",
 where desklet-name is the desklet's name, in this case hello-world, and name
 is either your name or your domain name. I will use the UUID
 "hello-world@orangeshark".</p>
-<div class="codehilite"><pre>mkdir -p ~/.local/share/cinnamon/desklets/hello-world@orangeshark
-<span class="nb">cd</span> ~/.local/share/cinnamon/desklets/hello-world@orangeshark
-</pre></div>
+<pre class="codehilite"><code class="language-sh">mkdir -p ~/.local/share/cinnamon/desklets/hello-world@orangeshark
+cd ~/.local/share/cinnamon/desklets/hello-world@orangeshark</code></pre>
 
 
 <p>Now we need to create the structure for our project. A desklet has the
 following structure:</p>
-<div class="codehilite"><pre>hello-world@orangeshark/
+<pre class="codehilite"><code class="language-text">hello-world@orangeshark/
 ├── desklet.js
-└── metadata.json
-</pre></div>
+└── metadata.json</code></pre>
 
 
 <p>The desklet.js file is where the majority of our JavaScript code will be
 located. metadata.json contains, of course, the metadata for the desklet,
 including the UUID and name of the desklet.</p>
-<div class="codehilite"><pre>touch desklet.js metadata.json
-</pre></div>
+<pre class="codehilite"><code class="language-bash">touch desklet.js metadata.json</code></pre>
 
 
 <h2>Time to code</h2>
 <p>Lets first define the metadata for the desklet, open up metadata.json and add
 the following json.</p>
-<div class="codehilite"><pre><span class="p">{</span>
-    <span class="nt">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;hello-world@orangeshark&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello, world! desklet&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Displays Hello, World!&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;prevent-decorations&quot;</span><span class="p">:</span> <span class="kc">false</span>
-<span class="p">}</span>
-</pre></div>
+<pre class="codehilite"><code class="language-json">{
+    &quot;uuid&quot;: &quot;hello-world@orangeshark&quot;,
+    &quot;name&quot;: &quot;Hello, world! desklet&quot;,
+    &quot;description&quot;: &quot;Displays Hello, World!&quot;,
+    &quot;prevent-decorations&quot;: false
+}</code></pre>
 
 
 <p>The metadata contains basic information about your desklet, including the
@@ -135,24 +121,23 @@ a couple of differences in the language. Several of these features are
 from Mozilla's version of JavaScript with some being defined in future
 versions of ECMAScript. I will provide links where you can find additional
 information on those features as we encounter them.</p>
-<div class="codehilite"><pre><span class="kr">const</span> <span class="nx">Desklet</span> <span class="o">=</span> <span class="nx">imports</span><span class="p">.</span><span class="nx">ui</span><span class="p">.</span><span class="nx">desklet</span><span class="p">;</span>
+<pre class="codehilite"><code class="language-javascript">const Desklet = imports.ui.desklet;
 
-<span class="kd">function</span> <span class="nx">HelloDesklet</span><span class="p">(</span><span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">_init</span><span class="p">(</span><span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">);</span>
-<span class="p">}</span>
+function HelloDesklet(metadata, desklet_id) {
+    this._init(metadata, desklet_id);
+}
 
-<span class="nx">HelloDesklet</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">__proto__</span><span class="o">:</span> <span class="nx">Desklet</span><span class="p">.</span><span class="nx">Desklet</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span>
+HelloDesklet.prototype = {
+    __proto__: Desklet.Desklet.prototype,
 
-    <span class="nx">_init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">Desklet</span><span class="p">.</span><span class="nx">Desklet</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">_init</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+    _init: function(metadata, desklet_id) {
+        Desklet.Desklet.prototype._init.call(this, metadata, desklet_id);
+    }
+}
 
-<span class="kd">function</span> <span class="nx">main</span><span class="p">(</span><span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">new</span> <span class="nx">HelloDesklet</span><span class="p">(</span><span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">);</span>
-<span class="p">}</span>
-</pre></div>
+function main(metadata, desklet_id) {
+    return new HelloDesklet(metadata, desklet_id);
+}</code></pre>
 
 
 <p>The above code is all you need to create a minimal desklet. You can use it
@@ -176,37 +161,36 @@ desklet. The _init function is the actual constructor for our "class" and our
 first task is to call the Desklet's constructor, passing the current instance
 using "this". Finally the main function is the entry point to our desklet and
 we just return an instance of our desklet.</p>
-<div class="codehilite"><pre><span class="kr">const</span> <span class="nx">Desklet</span> <span class="o">=</span> <span class="nx">imports</span><span class="p">.</span><span class="nx">ui</span><span class="p">.</span><span class="nx">desklet</span><span class="p">;</span>
-<span class="kr">const</span> <span class="nx">St</span> <span class="o">=</span> <span class="nx">imports</span><span class="p">.</span><span class="nx">gi</span><span class="p">.</span><span class="nx">St</span><span class="p">;</span>
+<pre class="codehilite"><code class="language-javascript">const Desklet = imports.ui.desklet;
+const St = imports.gi.St;
 
-<span class="kd">function</span> <span class="nx">HelloDesklet</span><span class="p">(</span><span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">_init</span><span class="p">(</span><span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">);</span>
-<span class="p">}</span>
+function HelloDesklet(metadata, desklet_id) {
+    this._init(metadata, desklet_id);
+}
 
-<span class="nx">HelloDesklet</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">__proto__</span><span class="o">:</span> <span class="nx">Desklet</span><span class="p">.</span><span class="nx">Desklet</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span>
+HelloDesklet.prototype = {
+    __proto__: Desklet.Desklet.prototype,
 
-    <span class="nx">_init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">Desklet</span><span class="p">.</span><span class="nx">Desklet</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">_init</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">);</span>
+    _init: function(metadata, desklet_id) {
+        Desklet.Desklet.prototype._init.call(this, metadata, desklet_id);
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">setupUI</span><span class="p">();</span>
-    <span class="p">},</span>
+        this.setupUI();
+    },
 
-    <span class="nx">setupUI</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="c1">// main container for the desklet</span>
-        <span class="k">this</span><span class="p">.</span><span class="nb">window</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">St</span><span class="p">.</span><span class="nx">Bin</span><span class="p">();</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">St</span><span class="p">.</span><span class="nx">Label</span><span class="p">();</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">text</span><span class="p">.</span><span class="nx">set_text</span><span class="p">(</span><span class="s2">&quot;Hello, world!&quot;</span><span class="p">);</span>
+    setupUI: function() {
+        // main container for the desklet
+        this.window = new St.Bin();
+        this.text = new St.Label();
+        this.text.set_text(&quot;Hello, world!&quot;);
 
-        <span class="k">this</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">add_actor</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">text</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">setContent</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nb">window</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+        this.window.add_actor(this.text);
+        this.setContent(this.window);
+    }
+}
 
-<span class="kd">function</span> <span class="nx">main</span><span class="p">(</span><span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">new</span> <span class="nx">HelloDesklet</span><span class="p">(</span><span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">);</span>
-<span class="p">}</span>
-</pre></div>
+function main(metadata, desklet_id) {
+    return new HelloDesklet(metadata, desklet_id);
+}</code></pre>
 
 
 <p>We now import a new library, this time St or Shell Toolkit library from GNOME.
@@ -247,6 +231,7 @@ aspects on creating Cinnamon desklets in the future, so stay tuned!</p>
           <ul>
             <li><a href="https://github.com/OrangeShark">Github</a></li>
             <li><a href="https://www.linkedin.com/pub/erik-edrosa/89/287/417">Linkedin</a></li>
+            <a href="https://gnu.org/gnu30"><img width="40%" src="https://static.fsf.org/nosvn/misc/GNU_30th_badge.png" alt="[ Celebrate 30 years of GNU! ]" /></a>         
           </ul>
         </div>
       </div>
