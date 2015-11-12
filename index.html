@@ -35,6 +35,19 @@
         <div class="content">
           <article>
  <h1 class="post-title">
+   <a href="/2015/11/11/algorithms-insertion-sort.html">Algorithms: Insertion Sort</a>
+ </h1>
+ <p class="post-meta">2015/11/11</p>
+ <p>I will be writing a series of blog posts about various algorithms. The purpose of these posts
+will be to help me further my understanding and ability to explain algorithms. Each post
+will cover an algorithm, provide an implementation in a programming language, explain the
+algorithm using the implementation, and finally discuss any possible other discoveries I find when
+researching the algorithm.</p>
+ <p><a href="/2015/11/11/algorithms-insertion-sort.html">Read More</a></p>
+</article>
+
+<article>
+ <h1 class="post-title">
    <a href="/2014/12/31/hello-world-desklet-tutorial.html">Tutorial: Hello, world! Cinnamon desklet</a>
  </h1>
  <p class="post-meta">2014/12/31</p>
@@ -57,158 +70,7 @@ and finding documentation on the libraries available in CJS was difficult. The
 only advice I saw was to read other people's source code and learn from that,
 while it is a great way to learn, it does not provide enough information. So
 I would like to share what I have learned and where I found it.</p>
-<p>Our first desklet will be a simple "Hello, World!" program, a simple program
-which displays the text "Hello, World!" on the desktop using GNOME Shell's
-<a href="https://wiki.gnome.org/Projects/Clutter">Clutter</a>-based toolkit called
-<a href="https://developer.gnome.org/st/stable/">St (Shell Toolkit)</a>. The St library
-provides an easy way to create simple user interfaces.</p>
-<h2>Requirements</h2>
-<ul>
-<li>Cinnamon (I am running Linux Mint 17.1 with version 2.4.5)</li>
-<li>Your favorite text editor</li>
-</ul>
-<h2>Set up</h2>
-<p>Let's start by setting up the directory for our desklet. Desklets are stored
-in the user's home directory ~/.local/share/cinnamon/desklets, this is where
-we will work on our desklet. First, we need to create the directory of our
-desklet with a unique ID or UUID in the following format "desklet-name@name",
-where desklet-name is the desklet's name, in this case hello-world, and name
-is either your name or your domain name. I will use the UUID
-"hello-world@orangeshark".</p>
-<div class="codehilite"><pre>mkdir -p ~/.local/share/cinnamon/desklets/hello-world@orangeshark
-<span class="nb">cd</span> ~/.local/share/cinnamon/desklets/hello-world@orangeshark
-</pre></div>
-
-
-<p>Now we need to create the structure for our project. A desklet has the
-following structure:</p>
-<div class="codehilite"><pre>hello-world@orangeshark/
-├── desklet.js
-└── metadata.json
-</pre></div>
-
-
-<p>The desklet.js file is where the majority of our JavaScript code will be
-located. metadata.json contains, of course, the metadata for the desklet,
-including the UUID and name of the desklet.</p>
-<div class="codehilite"><pre>touch desklet.js metadata.json
-</pre></div>
-
-
-<h2>Time to code</h2>
-<p>Lets first define the metadata for the desklet, open up metadata.json and add
-the following json.</p>
-<div class="codehilite"><pre><span class="p">{</span>
-    <span class="nt">&quot;uuid&quot;</span><span class="p">:</span> <span class="s2">&quot;hello-world@orangeshark&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello, world! desklet&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Displays Hello, World!&quot;</span><span class="p">,</span>
-    <span class="nt">&quot;prevent-decorations&quot;</span><span class="p">:</span> <span class="kc">false</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>The metadata contains basic information about your desklet, including the
-UUID we discussed earlier. The only special property is "prevent-decorations"
-which tells Cinnamon whether to apply your desktop's theme or prevent it from
-inheriting it. For this simple example, we will put the value false so the
-desklet looks like the rest of your desktop.</p>
-<p>Now for the JavaScript. There are several coding style guides to follow for
-JavaScript by the GNOME project, Cinnamon seems to follow
-<a href="https://wiki.gnome.org/Projects/GnomeShell/Gjs_StyleGuide">this guide</a>. If
-you are used to using JavaScript on the web or in node.js, you might notice
-a couple of differences in the language. Several of these features are
-from Mozilla's version of JavaScript with some being defined in future
-versions of ECMAScript. I will provide links where you can find additional
-information on those features as we encounter them.</p>
-<div class="codehilite"><pre><span class="kr">const</span> <span class="nx">Desklet</span> <span class="o">=</span> <span class="nx">imports</span><span class="p">.</span><span class="nx">ui</span><span class="p">.</span><span class="nx">desklet</span><span class="p">;</span>
-
-<span class="kd">function</span> <span class="nx">HelloDesklet</span><span class="p">(</span><span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">_init</span><span class="p">(</span><span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="nx">HelloDesklet</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">__proto__</span><span class="o">:</span> <span class="nx">Desklet</span><span class="p">.</span><span class="nx">Desklet</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span>
-
-    <span class="nx">_init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">Desklet</span><span class="p">.</span><span class="nx">Desklet</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">_init</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="kd">function</span> <span class="nx">main</span><span class="p">(</span><span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">new</span> <span class="nx">HelloDesklet</span><span class="p">(</span><span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">);</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>The above code is all you need to create a minimal desklet. You can use it
-as the basic template to start your own desklet. Now for an explanation of
-each part! The first line contains const, one of those new features I
-mentioned earlier, more info <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const">here</a>.
-The const declaration creates a constant in the current scope, in this case
-the global scope, with a value that cannot be changed through re-assignment.
-We use it here to import the desklet module from Cinnamon. The next function
-is our Desklet object's constructor, following GNOME's style guide for
-creating "classes". Using GNOME's class pattern, we assign to the
-prototype of HelloDesklet an object containing the methods and properties for
-our HelloDesklet class. The first property "__proto__" is a special
-one, it allows us to modify the prototype chain, allowing us to have a
-sort of inheritance of classes. So if a property is not found in the current
-instance, it will walk the prototype chain to the next prototype, in this
-case Desklet's prototype, and check if the property is there. So our desklet
-must "inherit" from <a href="https://github.com/linuxmint/Cinnamon/blob/master/js/ui/desklet.js#L35">Cinnamon's Desklet class</a>,
-Desklet contains a lot of code required by Cinnamon to set up and destroy a
-desklet. The _init function is the actual constructor for our "class" and our
-first task is to call the Desklet's constructor, passing the current instance
-using "this". Finally the main function is the entry point to our desklet and
-we just return an instance of our desklet.</p>
-<div class="codehilite"><pre><span class="kr">const</span> <span class="nx">Desklet</span> <span class="o">=</span> <span class="nx">imports</span><span class="p">.</span><span class="nx">ui</span><span class="p">.</span><span class="nx">desklet</span><span class="p">;</span>
-<span class="kr">const</span> <span class="nx">St</span> <span class="o">=</span> <span class="nx">imports</span><span class="p">.</span><span class="nx">gi</span><span class="p">.</span><span class="nx">St</span><span class="p">;</span>
-
-<span class="kd">function</span> <span class="nx">HelloDesklet</span><span class="p">(</span><span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">_init</span><span class="p">(</span><span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="nx">HelloDesklet</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">__proto__</span><span class="o">:</span> <span class="nx">Desklet</span><span class="p">.</span><span class="nx">Desklet</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span>
-
-    <span class="nx">_init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">Desklet</span><span class="p">.</span><span class="nx">Desklet</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">_init</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">);</span>
-
-        <span class="k">this</span><span class="p">.</span><span class="nx">setupUI</span><span class="p">();</span>
-    <span class="p">},</span>
-
-    <span class="nx">setupUI</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="c1">// main container for the desklet</span>
-        <span class="k">this</span><span class="p">.</span><span class="nb">window</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">St</span><span class="p">.</span><span class="nx">Bin</span><span class="p">();</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">St</span><span class="p">.</span><span class="nx">Label</span><span class="p">();</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">text</span><span class="p">.</span><span class="nx">set_text</span><span class="p">(</span><span class="s2">&quot;Hello, world!&quot;</span><span class="p">);</span>
-
-        <span class="k">this</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nx">add_actor</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">text</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">setContent</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nb">window</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="kd">function</span> <span class="nx">main</span><span class="p">(</span><span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">new</span> <span class="nx">HelloDesklet</span><span class="p">(</span><span class="nx">metadata</span><span class="p">,</span> <span class="nx">desklet_id</span><span class="p">);</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>We now import a new library, this time St or Shell Toolkit library from GNOME.
-I have found <a href="http://www.roojs.com/seed/gir-1.2-gtk-3.0/seed/St.html">this</a>
-documentation to be helpful in finding what classes are available in
-JavaScript over the GNOME's official <a href="https://developer.gnome.org/st/stable/">C API reference</a>.
-Next, a new method to HelloDesklet has been added which sets up our little
-window on the desktop and displays the text "Hello, world!". We use a
-StBin container that can contain a single child, which is a StLabel widget
-with the text "Hello, world!". Finally we add the label to the window with
-the add_actor method and then set the desklet content with setContent method
-inherited from the Desklet base class. That is it! We have finished the
-basis of a simple desklet for Cinnamon. It should look something like what
-you see below (the style might be different depending on your Cinnamon theme).</p>
-<p><img class="pure-img" alt="Hello, World!" src="/imgs/helloworlddesklet.png"></p>
-<p>This concludes the tutorial for Cinnamon desklets. I plan on covering more
-aspects on creating Cinnamon desklets in the future, so stay tuned!</p>
+ <p><a href="/2014/12/31/hello-world-desklet-tutorial.html">Read More</a></p>
 </article>
 
         </div>
@@ -228,7 +90,7 @@ aspects on creating Cinnamon desklets in the future, so stay tuned!</p>
           <p>Site generated by 
             <a href="https://github.com/OrangeShark/webstache">webstache</a>
           </p>
-          <p><emp>&copy; Erik Edrosa 2014 All Rights Reserved</emp></p>
+          <p><emp>&copy; Erik Edrosa 2014-2015 All Rights Reserved</emp></p>
         </div>
       </div>
     </div>

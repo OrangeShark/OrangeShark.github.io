@@ -1,5 +1,178 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<rss version="2.0"><channel><title>Erik Edrosa</title><link>http://www.erikedrosa.com/</link><description>A blog about programming</description><lastBuildDate>Sat, 07 Nov 2015 00:11:21 GMT</lastBuildDate><generator>PyRSS2Gen-1.1.0</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Tutorial: Hello, world! Cinnamon desklet</title><link>http://www.erikedrosa.com/2014/12/31/hello-world-desklet-tutorial.html</link><description>&lt;p&gt;This is the first of hopefully several tutorials on developing desklets for
+<rss version="2.0"><channel><title>Erik Edrosa</title><link>http://www.erikedrosa.com/</link><description>A blog about programming</description><lastBuildDate>Wed, 11 Nov 2015 21:33:58 GMT</lastBuildDate><generator>PyRSS2Gen-1.1.0</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Algorithms: Insertion Sort</title><link>http://www.erikedrosa.com/2015/11/11/algorithms-insertion-sort.html</link><description>&lt;p&gt;I will be writing a series of blog posts about various algorithms. The purpose of these posts
+will be to help me further my understanding and ability to explain algorithms. Each post
+will cover an algorithm, provide an implementation in a programming language, explain the
+algorithm using the implementation, and finally discuss any possible other discoveries I find when
+researching the algorithm.&lt;/p&gt;
+&lt;h2&gt;What are Algorithms?&lt;/h2&gt;
+&lt;p&gt;Algorithms are a fundamental part of Computer Science, but what exactly are algorithms?
+Well according to &lt;a href="http://www.merriam-webster.com/dictionary/algorithm" title="Merriam-Webster's definition for Algorithm"&gt;Merriam-Webster&lt;/a&gt;, they define it as:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;a set of steps that are followed in order to solve a mathematical
+problem or to complete a computer process&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;In &lt;a href="http://mitpress.mit.edu/books/introduction-algorithms" title="MIT Press site"&gt;Introduction to Algorithms&lt;/a&gt;, algorithms are described as "a tool for solving a
+well-specified computational problem" and as a technology. Knuth further describes algorithms
+as having five important features in his book &lt;a href="http://www-cs-faculty.stanford.edu/~uno/taocp.html" title="The Art of Computer Programming site"&gt;The Art of Computer Programming&lt;/a&gt;.
+These include:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Finiteness: it must eventually stop (better if it stops in a reasonable amount of time)&lt;/li&gt;
+&lt;li&gt;Definiteness: each step must be clearly stated&lt;/li&gt;
+&lt;li&gt;Input: Zero or more inputs to give to an algorithm&lt;/li&gt;
+&lt;li&gt;Output: One or more outputs the algorithm produces&lt;/li&gt;
+&lt;li&gt;Effectiveness: operations must be basic and producible&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;So why are algorithms important to study? Well just as &lt;a href="http://mitpress.mit.edu/books/introduction-algorithms" title="MIT Press site"&gt;Introduction to Algorithms&lt;/a&gt;
+describes them as tools, they should be an important tool in any programmer's tool set to
+allow them to go above and beyond to solve problems.&lt;/p&gt;
+&lt;h2&gt;Insertion Sort&lt;/h2&gt;
+&lt;p&gt;Sorting algorithms are typically one of the first algorithms introduced to students studying
+Computer Science. The problems are usually easy to understand; I have a sequence of objects
+and I want to arrange them in some ordered sequence. Numbers are often used as the objects
+in examples of these algorithms because ordering numbers in an increasing or decreasing
+sequence is simple to understand. Insertion sort is one of those sorting algorithms.&lt;/p&gt;
+&lt;p&gt;The basic high level idea of the insertion sort algorithm is given an unsorted list, each item
+of the list is taken out and then inserted into a list in sorted order. Well according to
+the definition of an algorithm, maybe what I just described is more like the strategy to come
+up with an algorithm. This basic strategy can thus produce multiple algorithms with different
+properties. I will cover two variations of insertion sort and discuss their pros and cons.&lt;/p&gt;
+&lt;h3&gt;Insertion Sort on Arrays&lt;/h3&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;Insertion&lt;span class="o"&gt;-&lt;/span&gt;Sort&lt;span class="p"&gt;(&lt;/span&gt;v&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="kr"&gt;for&lt;/span&gt; i &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt; to &lt;span class="kp"&gt;length&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;v&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+        j &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; i
+        &lt;span class="kr"&gt;while&lt;/span&gt; j &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt; and v&lt;span class="p"&gt;[&lt;/span&gt;j&lt;span class="m"&gt;-1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; v&lt;span class="p"&gt;[&lt;/span&gt;j&lt;span class="p"&gt;]&lt;/span&gt;
+            swap v&lt;span class="p"&gt;[&lt;/span&gt;j&lt;span class="p"&gt;]&lt;/span&gt; and v&lt;span class="p"&gt;[&lt;/span&gt;j&lt;span class="m"&gt;-1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+            j &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; j &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The above is the pseudocode for insertion sort taken from &lt;a href="https://en.wikipedia.org/wiki/Insertion_sort" title="Wikipedia page on insertion sort"&gt;Wikipedia&lt;/a&gt;. Please note the
+&lt;code&gt;&amp;lt;-&lt;/code&gt; operator is the assignment operator, more commonly written as &lt;code&gt;=&lt;/code&gt; in many languages. The
+algorithm sorts the list &lt;code&gt;v&lt;/code&gt; in place, meaning it will modify, or mutate, the list given to
+the Insertion-Sort function. One will notice that the operation &lt;code&gt;swap&lt;/code&gt; is usually not a basic
+operation in most languages so here is the simple pseudocode for &lt;code&gt;swap&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;temp &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; v&lt;span class="p"&gt;[&lt;/span&gt;j&lt;span class="p"&gt;]&lt;/span&gt;
+v&lt;span class="p"&gt;[&lt;/span&gt;j&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; v&lt;span class="p"&gt;[&lt;/span&gt;j&lt;span class="m"&gt;-1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+v&lt;span class="p"&gt;[&lt;/span&gt;j&lt;span class="m"&gt;-1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; temp
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;With the above pseudocode, translating it to your favorite programming language is trivial.
+Here it is written in python.&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;insertion_sort&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;v&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;v&lt;/span&gt;&lt;span class="p"&gt;)):&lt;/span&gt;
+        &lt;span class="n"&gt;j&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;
+        &lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="n"&gt;v&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;v&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;]:&lt;/span&gt;
+            &lt;span class="n"&gt;v&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;v&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;v&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;v&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+            &lt;span class="n"&gt;j&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The python code is almost a literal copy and paste of the pseudocode, which shows off the popular
+idea on how python is almost like pseudocode. The line &lt;code&gt;v[j], v[j-1] = v[j-1], v[j]&lt;/code&gt; is how you
+perform a swap operation in python.&lt;/p&gt;
+&lt;p&gt;&lt;img class="pure-img" src="/imgs/insertionsort.gif"&gt;&lt;/p&gt;
+&lt;p&gt;Now to explain the basic idea behind the above insertion sort algorithm. The algorithm treats
+the front of the list, that is elements with index less than &lt;code&gt;i&lt;/code&gt;, as a list that is already
+sorted and elements that are greater than &lt;code&gt;i&lt;/code&gt; as elements which need to be sorted. This
+is why the algorithm starts from 1 because sorting a list of length 1 is trivial, it is already
+sorted. So the first loop goes through the unsorted part of the list, "taking out" the element,
+and then inserting it into the the sorted part of the list. The insertion part of the algorithm
+is the inner while loop, which keeps swapping elements from the tail end of the sorted list until
+it reaches the correct spot.&lt;/p&gt;
+&lt;p&gt;The behavior of this algorithm is also pretty straight forward. In the best case, the list is
+already sorted and the algorithm takes linear time or O(n). The algorithm will go through
+the list and try to insert the element to only find &lt;code&gt;v[j-1] &amp;gt; v[j]&lt;/code&gt; to be false and thus no need
+to swap the element. For the worst case insertion sort takes quadratic time or O(n&lt;sup&gt;2&lt;/sup&gt;),
+the worst case being the list is in reverse sorted order. It is the worst case because at each
+element in the list, it must swap that element until it reaches the front of the list. For memory,
+the algorithm sorts the list in place and thus is constant space or O(1). The insertion sort
+algorithm I listed here can actually be improved to make it slightly faster, but I leave that as
+an exercise for the reader (Hint: it is mentioned on &lt;a href="https://en.wikipedia.org/wiki/Insertion_sort" title="Wikipedia page on insertion sort"&gt;Wikipedia&lt;/a&gt;).&lt;/p&gt;
+&lt;h3&gt;Insertion Sort on Linked Lists&lt;/h3&gt;
+&lt;p&gt;The second variation is an algorithm that works on linked lists or sometimes known as cons cells
+in other programming languages. This algorithm is written as a recursive function.&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;Insertion-Sort(l)
+    if l is the empty list
+        return the empty list
+    else
+        return Insert(Insertion-Sort(rest of l), head of l)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The above pseudocode is an example of the algorithm. There is of course one problem with the above
+pseudocode, Insertion-Sort uses the operation of Insert to insert an element into an already sorted
+list. Insert isn't a basic operation so we must provide an Insert algorithm for lists.&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;Insert(l, n)
+    if l is the empty list
+        return a list with the element n
+    else if n &amp;lt;= the head of l
+        return a list with the element n as the new head of list l
+    else
+        return a list with Insert(rest of l, n))
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now we should be able to implement the Insertion Sort algorithm in a programming language. I
+decided to use the Scheme programming language because of lists being native to the language.&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;define &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insertion-sort&lt;/span&gt; &lt;span class="nv"&gt;l&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+  &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;if &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;null? &lt;/span&gt;&lt;span class="nv"&gt;l&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+      &lt;span class="o"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+      &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insert&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insertion-sort&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;cdr &lt;/span&gt;&lt;span class="nv"&gt;l&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;car &lt;/span&gt;&lt;span class="nv"&gt;l&lt;/span&gt;&lt;span class="p"&gt;))))&lt;/span&gt;
+
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;define &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insert&lt;/span&gt; &lt;span class="nv"&gt;l&lt;/span&gt; &lt;span class="nv"&gt;n&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+  &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;cond &lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="nb"&gt;null? &lt;/span&gt;&lt;span class="nv"&gt;l&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;list &lt;/span&gt;&lt;span class="nv"&gt;n&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+        &lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="nb"&gt;&amp;lt;= &lt;/span&gt;&lt;span class="nv"&gt;n&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;car &lt;/span&gt;&lt;span class="nv"&gt;l&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;cons &lt;/span&gt;&lt;span class="nv"&gt;n&lt;/span&gt; &lt;span class="nv"&gt;l&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+        &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;else &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;cons &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;car &lt;/span&gt;&lt;span class="nv"&gt;l&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; 
+                    &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insert&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;cdr &lt;/span&gt;&lt;span class="nv"&gt;l&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="nv"&gt;n&lt;/span&gt;&lt;span class="p"&gt;)))))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;For those unfamiliar with the Lisp family of languages, here is a break down of some of the
+operations performed above. &lt;code&gt;null?&lt;/code&gt; is a procedure to check for the empty list, &lt;code&gt;car&lt;/code&gt; is a
+procedure to get the first element of a list, &lt;code&gt;cdr&lt;/code&gt; is the procedure to get the list without
+the first element, &lt;code&gt;cons&lt;/code&gt; is the procedure to create pairs which form the linked lists of lisp.
+So &lt;code&gt;(cons x y)&lt;/code&gt; with &lt;code&gt;y&lt;/code&gt; being a list &lt;code&gt;(a b)&lt;/code&gt; creates a list &lt;code&gt;(x a b)&lt;/code&gt;. &lt;code&gt;cond&lt;/code&gt; is a special
+form similar to &lt;code&gt;if&lt;/code&gt; except with multiple clauses in the form &lt;code&gt;(question answer)&lt;/code&gt;, where
+if &lt;code&gt;question&lt;/code&gt; evaluates to true, then &lt;code&gt;answer&lt;/code&gt; is evaluated and returned as the result.&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insertion-sort&lt;/span&gt; &lt;span class="o"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insert&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insertion-sort&lt;/span&gt; &lt;span class="o"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insert&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insert&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insertion-sort&lt;/span&gt; &lt;span class="o"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insert&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insert&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insert&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insertion-sort&lt;/span&gt; &lt;span class="o"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insert&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insert&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insert&lt;/span&gt; &lt;span class="o"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insert&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insert&lt;/span&gt; &lt;span class="o"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insert&lt;/span&gt; &lt;span class="o"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;cons &lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insert&lt;/span&gt; &lt;span class="o"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;cons &lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;cons &lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;insert&lt;/span&gt; &lt;span class="o"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)))&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;cons &lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;cons &lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt; &lt;span class="o"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)))&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;cons &lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="o"&gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The idea behind this linked list version of insertion sort is to take each element from the list
+and then insert it into the sorted version of the list. So this recursive algorithm has to have
+a base case, which is if the list &lt;code&gt;l&lt;/code&gt; is the empty list. Well, how do you sort the empty list?
+Of course, it is just the empty list. Now if the list isn't empty, we need to sort it, so the
+recursive step is to sort the rest of &lt;code&gt;l&lt;/code&gt;. With the result of the recursive call, we have a sorted
+list without the first element of &lt;code&gt;l&lt;/code&gt;, so we then insert the the first element &lt;code&gt;l&lt;/code&gt; into the sorted
+list. The insert algorithm is complex enough to need an explanation as well. The insert algorithm
+is also recursive with the same base case of the list &lt;code&gt;l&lt;/code&gt; being empty, so we just return a new list
+with the number &lt;code&gt;n&lt;/code&gt;. The next base case is when &lt;code&gt;n&lt;/code&gt; is less than or equal to the head of list &lt;code&gt;l&lt;/code&gt;,
+so the proper action is to &lt;code&gt;cons&lt;/code&gt; &lt;code&gt;n&lt;/code&gt; to be the new head of &lt;code&gt;l&lt;/code&gt;. The recursive step is when &lt;code&gt;n&lt;/code&gt;
+isn't in the correct position, so we &lt;code&gt;cons&lt;/code&gt; the current head of &lt;code&gt;l&lt;/code&gt; onto the list with &lt;code&gt;n&lt;/code&gt; inserted
+into it.&lt;/p&gt;
+&lt;p&gt;The behavior of the list insertion sort is similar to the first insertion sort. The best case is
+when the list is already sorted which will give you linear time or O(n). What the algorithm does
+is it tries to insert the head of &lt;code&gt;l&lt;/code&gt; onto the already sorted list, the head will just be &lt;code&gt;cons&lt;/code&gt;
+to the front of it. The worst case is also the same, the list is in reverse sorted list and thus
+has quadratic time or O(n&lt;sup&gt;2&lt;/sup&gt;). Memory is a different story, this version of the algorithm
+creates a new list instead of sorting in place. The best case, when the list is already sorted, the
+algorithm copies the elements to the new list and is just linear space or O(n). The worst case is
+the list is in reverse sorted order, the insert algorithm creates a new list each time &lt;code&gt;n&lt;/code&gt; is
+inserted into &lt;code&gt;l&lt;/code&gt; which is quadratic space or O(n&lt;sup&gt;2&lt;/sup&gt;). The above algorithm can also be
+improved, insertion sort can be made into an iterative process and the insert algorithm can also
+insert into the list by mutating it.&lt;/p&gt;</description><guid isPermaLink="true">http://www.erikedrosa.com/2015/11/11/algorithms-insertion-sort.html</guid><pubDate>Wed, 11 Nov 2015 00:00:00 GMT</pubDate></item><item><title>Tutorial: Hello, world! Cinnamon desklet</title><link>http://www.erikedrosa.com/2014/12/31/hello-world-desklet-tutorial.html</link><description>&lt;p&gt;This is the first of hopefully several tutorials on developing desklets for
 the Cinnamon desktop environment. In this tutorial, I will cover the basics
 of creating a desklet and do my best to link or refer to additional
 resources where you might find more information on
